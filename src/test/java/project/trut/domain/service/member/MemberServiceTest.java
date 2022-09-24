@@ -55,6 +55,16 @@ class MemberServiceTest {
 
     @Test
     void findById() {
+        //given
+        Member member = new Member("test", "test", "test");
+        Member saveMember = memberService.save(member);
+
+        //when
+        Member findMember = memberService.findById(saveMember.getId()).get();
+
+        //then
+        assertThat(findMember).isEqualTo(member);
+
     }
 
     @Test

@@ -4,17 +4,28 @@
     <meta charset="utf-8">
     <link th:href="@{/css/bootstrap.min.css}"
           href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+            .container {
+            max-width: 560px;
+            }
+            .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+}
+    </style>
 </head>
-<body>
 
+<body>
 <div class="container">
     <div class="py-5 text-center">
         <h2>TRUT 시작</h2>
     </div>
-    <form action="route.html" th:action method="post">
+    <form action="route.html" th:object="${locationForm}" th:action method="post">
+
         <div>
             <div>출발 지역</div>
-            <select id="departure" name="departure" class="form-select">
+            <div class="field-error" th:errors="*{departure}"/>
+            <select th:field="*{departure}" class="form-select" th:errorclass="field-error">
                 <option value="">==출발 지역 선택==</option>
                 <option th:each="initLocation : ${initLocations}"
                         th:value="${initLocation.name()}"
@@ -26,7 +37,8 @@
 
         <div>
             <div>도착 지역</div>
-            <select id="destination" name="destination" class="form-select">
+            <div class="field-error" th:errors="*{destination}"/>
+            <select th:field="*{destination}" class="form-select" th:errorclass="field-error">
                 <option value="">==도착 지역 선택==</option>
                 <option th:each="initLocation : ${initLocations}"
                         th:value="${initLocation.name()}"

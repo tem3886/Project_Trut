@@ -8,11 +8,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Getter @Setter
-@RequiredArgsConstructor
 public class LocationUpdateDto {
 
     private String departure;
     private String destination;
 
-    private List<String> waypoint;
+    public LocationUpdateDto() {
+    }
+
+    public LocationUpdateDto(String departure, String destination) {
+        this.departure = departure;
+        this.destination = destination;
+    }
 }

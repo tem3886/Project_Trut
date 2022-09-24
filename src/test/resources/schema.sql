@@ -12,8 +12,9 @@ drop table if exists location CASCADE;
 create table location
 (
     id bigint,
+    date_time DATE,
     departure varchar(10),
     destination varchar(20),
-    primary key (id),
+    primary key (id,date_time),
     foreign key(id) references member(id)
 );

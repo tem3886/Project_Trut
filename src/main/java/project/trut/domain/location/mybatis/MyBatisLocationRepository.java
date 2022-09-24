@@ -7,6 +7,8 @@ import project.trut.domain.location.Location;
 import project.trut.domain.location.LocationRepository;
 import project.trut.domain.location.LocationUpdateDto;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Repository
@@ -23,8 +25,8 @@ public class MyBatisLocationRepository implements LocationRepository {
     }
 
     @Override
-    public void update(Long id, LocationUpdateDto updateParam) {
-        locationMapper.update(id, updateParam);
+    public void update(Long id, LocalDate dateTime, LocationUpdateDto updateParam) {
+        locationMapper.update(id, dateTime, updateParam);
     }
 
     @Override

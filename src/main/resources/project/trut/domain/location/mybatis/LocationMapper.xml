@@ -4,19 +4,19 @@
 <mapper namespace="project.trut.domain.location.mybatis.LocationMapper">
 
     <insert id="save" keyProperty="id">
-            insert into location (id, departure, destination)
-            values (#{id}, #{departure}, #{destination})
+            insert into location (id, date_time, departure, destination)
+            values (#{id}, formatdatetime(#{dateTime}, 'yyyy-MM-dd'), #{departure}, #{destination})
     </insert>
 
     <update id="update">
         update location
-        set departure=#{updateParam.departure}
+        set departure=#{updateParam.departure},
             destination=#{updateParam.destination}
-        where id=#{id}
+        where id=#{id} and date_time = #{dateTime}
     </update>
 
-    <select id="findById" resultType="Member">
-        select id, departure, destination
+    <select id="findById" resultType="Location">
+        select id, date_time, departure, destination
         from location
         where id=#{id}
     </select>

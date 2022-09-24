@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.trut.domain.member.Member;
 import project.trut.domain.member.MemberRepository;
+import project.trut.domain.member.MemberUpdateDto;
 
 @Controller
 @Slf4j
@@ -38,5 +39,22 @@ public class MemberController {
             return "members/addMemberForm";
         }
         return "redirect:/";
+    }
+
+    @GetMapping("/update")
+    public String updateForm(@ModelAttribute Member member) {
+        return "members/updateMemberForm";
+    }
+
+    @PostMapping("/update")
+    public String update(@Validated @ModelAttribute MemberUpdateDto memberUpdateDto,
+                         BindingResult bindingResult) {
+
+        return "redirect:/";
+    }
+
+    @RequestMapping("/list")
+    public String listForm(@ModelAttribute Member member) {
+        return "members/list";
     }
 }

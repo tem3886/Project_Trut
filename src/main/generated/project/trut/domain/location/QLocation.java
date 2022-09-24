@@ -19,6 +19,8 @@ public class QLocation extends EntityPathBase<Location> {
 
     public static final QLocation location = new QLocation("location");
 
+    public final DatePath<java.time.LocalDate> dateTime = createDate("dateTime", java.time.LocalDate.class);
+
     public final StringPath departure = createString("departure");
 
     public final StringPath destination = createString("destination");
