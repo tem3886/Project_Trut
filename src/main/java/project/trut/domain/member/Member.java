@@ -17,14 +17,14 @@ public class Member {
     private Long id;
 
     @NotEmpty
-    @Size(min=1, max=20)
+    @Size(max=20)
     @Column(name="login_id", length = 20)
     private String loginId;
     @NotEmpty
-    @Size(min=1, max=20)
+    @Size(max=20)
     private String password;
     @NotEmpty
-    @Size(min=1, max=20)
+    @Size(max=20)
     private String name;
 
     public Member() {

@@ -44,7 +44,7 @@ class MemberServiceTest {
         Long id = saveMember.getId();
 
         //when
-        MemberUpdateDto updateParam = new MemberUpdateDto("newName", "asd");
+        MemberUpdateDto updateParam = new MemberUpdateDto(member.getLoginId(),"newName", "asd");
         memberService.update(id, updateParam);
 
         //then

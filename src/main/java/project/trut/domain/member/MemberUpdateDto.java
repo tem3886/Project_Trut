@@ -6,20 +6,26 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Setter @Getter
 public class MemberUpdateDto {
 
+    private String loginId;
+
     @NotEmpty
-    private String name;
-    @NotEmpty
+    @Size(max=20)
     private String password;
+    @NotEmpty
+    @Size(max=20)
+    private String name;
 
     public MemberUpdateDto() {
     }
 
-    public MemberUpdateDto(String name, String password) {
-        this.name = name;
+    public MemberUpdateDto(String loginId, String password, String name) {
+        this.loginId = loginId;
         this.password = password;
+        this.name = name;
     }
 }
