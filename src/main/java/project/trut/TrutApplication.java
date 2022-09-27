@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 import project.trut.config.MyBatisConfig;
+import project.trut.domain.ApiKey;
 
 @Slf4j
 @Import(MyBatisConfig.class)

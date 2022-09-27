@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import project.trut.domain.ApiKey;
 import project.trut.domain.location.LocationRepository;
 import project.trut.domain.location.mybatis.LocationMapper;
 import project.trut.domain.location.mybatis.MyBatisLocationRepository;
@@ -21,6 +22,10 @@ public class MyBatisConfig {
     private final MemberMapper memberMapper;
     private final LocationMapper locationMapper;
 
+    @Bean
+    public ApiKey apiKey() {
+        return new ApiKey();
+    }
     @Bean
     public LoginService loginService() {
         return new LoginService(memberRepository());

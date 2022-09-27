@@ -61,7 +61,7 @@ public class LocationController {
             updateLocation(location);
         }
 
-        return "redirect:/trut/way";
+        return "redirect:/trut/tour";
     }
 
     private void updateLocation(Location location) {

@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="py-2 text-center">
+        <h2>TRUT 시작</h2>
+    </div>
+</div>
+<div class="container" style="float:left">
+    <form action="tour.html" th:action method="post">
+        <div class="row">
+            <div class="col">
+                <select id="classification" name="classification" class="form-select" style="width:300px;height:50px;">
+                    <option th:each="initTour : ${initTours}"
+                            th:value="${initTour.name()}"
+                            th:text="${initTour.description}"
+                            style="text-align:center">대분류</option>
+                </select>
+            </div>
+            <div class="col">
+                <button class="w-5 btn btn-primary btn-lg" type="submit">검색</button>
+            </div>
+            <div class="col">
+                선택한 리스트 들 표시
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
