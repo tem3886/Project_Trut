@@ -4,14 +4,33 @@
     <meta charset="utf-8">
     <link th:href="@{/css/bootstrap.min.css}"
           href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        table: {
+        width: 100%;
+        border: 1px solid #444444;
+        text-align: center;
+        }
+        th, td{
+        border: 1px solid #444444;
+        }
+        paging:{
+        size="2"
+        }
+    </style>
 </head>
 <body>
+<div th:if="${error}" >
+    <script type="text/javascript">
+        alert("잠시 후에 다시 시도해 주세요.");
+    </script>
+</div>
+
 <div class="container">
     <div class="py-2 text-center">
-        <h2>TRUT 시작</h2>
+        <h2>관광지 소개</h2>
     </div>
 </div>
-<div class="container" style="float:left">
+<div class="container">
     <form action="tour.html" th:action method="post">
         <div class="row">
             <div class="col">
@@ -19,17 +38,52 @@
                     <option th:each="initTour : ${initTours}"
                             th:value="${initTour.name()}"
                             th:text="${initTour.description}"
+                            th:selected="${initTour} == ${classification}"
                             style="text-align:center">대분류</option>
                 </select>
             </div>
             <div class="col">
                 <button class="w-5 btn btn-primary btn-lg" type="submit">검색</button>
             </div>
-            <div class="col">
-                선택한 리스트 들 표시
-            </div>
         </div>
     </form>
+    <hr class="my-3">
+    <div class="row">
+    <table th:if="${tourList.size() != 0}">
+        <thead>
+        <tr class="tHead">
+            <th class="image">사진</th>
+            <th class="info">정보</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="tour : ${tourList}">
+            <tr class="tBody" th:object="${tour}">
+                <td class="image">
+                    <img class="img" th:src="*{image}" alt="관광지사진"
+                         th:if="${tour.image != null}" style="width:100%;height:100%"/>
+                </td>
+                <td class="info">
+                    <p th:text="|title: *{title}|"></p><br/>
+                    <p th:text="|tel: *{tel}|"></p><br/>
+                    <p th:text="|addr: *{addr}|"></p><br/>
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="row" th:object="${paging}" th:if="${paging.getTotalCount() > 0}">
+        <div class="paging" style="text-align: center">
+            <a class="changePage" th:if="${paging.getPrev()}" th:href="|@{/trut/tour/{page}(page=*{startPage-1},code=${classification.getCode()})}|"><code>&lt;</code></a>
+            <th:block th:each="num : ${#numbers.sequence(paging.getStartPage(), paging.getEndPage())}">
+                <code th:if="${paging.getPageNum() == num}" th:text="${num}"></code>
+                <a class="changePage" th:unless="${paging.getPageNum() == num}" th:href="|@{/trut/tour/{page}(page=${num},code=${classification.getCode()})}|"><code th:text="${num}"></code></a>
+            </th:block>
+            <a class="changePage" th:if="*{next}" th:href="|@{/trut/tour/{page}(page=*{endPage+1},code=${classification.getCode()})}|"><code>&gt;</code></a>
+        </div>
+    </div>
 </div>
 
 </body>
