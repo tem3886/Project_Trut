@@ -1,13 +1,12 @@
 package project.trut.web.Tour;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import project.trut.domain.service.tour.TourApiDto;
+import project.trut.domain.tour.TourApiDto;
 import project.trut.domain.service.tour.TourService;
 import project.trut.domain.tour.InitTour;
 import project.trut.domain.tour.TourLocalRepository;
@@ -37,6 +36,7 @@ public class TourController {
     public String wayPoint(@RequestParam(name = "parse", defaultValue = "false") boolean parse,
                            @RequestParam(name="size", defaultValue = "false") boolean size,
                            @RequestParam(name="select", defaultValue = "false") boolean select,
+                           @RequestParam(name="del", defaultValue = "false") boolean del,
                            Model model) {
         if (parse) {
             model.addAttribute("parse", "잠시 후에 다시 시도해 주세요.");
@@ -47,12 +47,15 @@ public class TourController {
         if (select) {
             model.addAttribute("select", "저장되었습니다.");
         }
+        if (del) {
+            model.addAttribute("del", "관광지가 모두 삭제 되었습니다.");
+        }
 
         model.addAttribute("paging", new TourPaging());
         model.addAttribute("tourList", new ArrayList<TourApiDto>());
         model.addAttribute("classification", InitTour.nature);
 
-        return "trut/tour";
+        return "trut/addTour";
     }
 
     @PostMapping
@@ -67,7 +70,7 @@ public class TourController {
             return "redirect:/trut/tour?parse=true";
         }
 
-        return "trut/tour";
+        return "trut/addTour";
     }
 
     @RequestMapping("/{pageNum}")
@@ -97,7 +100,7 @@ public class TourController {
 
         model.addAttribute("classification", initTour.get());
 
-        return "trut/tour";
+        return "trut/addTour";
     }
 
     @PostMapping("/add")
@@ -111,6 +114,37 @@ public class TourController {
 
         return "redirect:/trut/tour?select=true";
     }
+
+    @GetMapping("/edit")
+    public String editForm(Model model) {
+        model.addAttribute("tourList", tourList);
+        return "/trut/editTour";
+    }
+
+    @PostMapping("/edit")
+    public String editTour(@ModelAttribute("tour") TourApiDto tour,
+                           Model model) {
+
+        log.info("tour = {}", tour.toString());
+
+        for (int i=0; i < tourList.size(); i++) {
+            if (tourList.get(i).equals(tour)) {
+                tourList.remove(i);
+            }
+        }
+        log.info("tourList = {}", tourList.toString());
+
+        return "redirect:/trut/tour/edit";
+    }
+
+    @GetMapping("/del")
+    public String delTour(Model model) {
+
+        tourList.clear();
+
+        return "redirect:/trut/tour?del=true";
+    }
+
 
     private void getTourList(Model model, TourPaging paging) throws ParseException {
         List<TourApiDto> tourList = tourService.getTourList(paging);

@@ -8,6 +8,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import project.trut.domain.ApiKey;
+import project.trut.domain.tour.TourApiDto;
 import project.trut.web.Tour.TourPaging;
 
 import java.net.URI;

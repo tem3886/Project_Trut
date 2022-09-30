@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
+import project.trut.domain.location.LocationForm;
 import project.trut.domain.location.LocationUpdateDto;
-import project.trut.domain.service.tour.TourApiDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +18,13 @@ import java.util.List;
 @Getter @ToString
 public class TourLocalRepository {
 
-    private LocationUpdateDto location;
+    private LocationForm location = new LocationForm();
     private List<TourApiDto> tourList = new ArrayList<>(3);
+
+
+    public void setLocation(LocationForm location) {
+        this.location = location;
+    }
 
 
 }

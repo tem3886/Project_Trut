@@ -1,10 +1,116 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        table: {
+            width: 100%;
+            border: 1px solid #444444;
+            text-align: center;
+        }
+        th, td{
+            border: 1px solid #444444;
+        }
+    </style>
 </head>
 <body>
+<div>
+    <script type="text/javascript" th:if="${parse}">
+        alert("api를 불러오는데 실패했습니다. 잠시 후에 다시 시도해 주세요.");
+    </script>
+    <script type="text/javascript" th:if="${size}">
+        alert("최대 3개 선택할 수 있습니다.");
+    </script>
+    <script type="text/javascript" th:if="${select}">
+        alert("저장되었습니다.");
+    </script>
+    <script type="text/javascript" th:if="${del}">
+        alert("관광지가 모두 삭제 되었습니다.");
+    </script>
+</div>
+
+<div class="container">
+    <div style="float:right">
+        <a class="deleteTour" th:href="|@{/trut/tour/edit}|">나의 관광지 관리</a>
+    </div>
+    <div class="py-2 text-center">
+        <h2>관광지 추가</h2>
+    </div>
+</div>
+<div class="container">
+    <form action="tour.html" th:action="@{/trut/tour/1}" method="post">
+        <div class="row">
+            <div class="col">
+                <select id="classification" name="classification" class="form-select">
+                    <option th:each="initTour : ${initTours}"
+                            th:value="${initTour.name()}"
+                            th:text="${initTour.description}"
+                            th:selected="${initTour} == ${classification}"
+                            style="text-align:center">대분류</option>
+                </select>
+            </div>
+            <div class="col">
+                <button class="w-5 btn btn-primary btn-lg" type="submit">검색</button>
+            </div>
+        </div>
+    </form>
+    <div class="row" style="float:right">
+        <a class="findPath" th:href="|@{/trut/find}|">경로찾기<code>&#45;&gt;</code></a>
+    </div>
+
+    <hr class="my-3">
+
+    <div class="row">
+        <table th:if="${tourList.size() != 0}">
+            <thead>
+            <tr class="tHead">
+                <th class="image">사진</th>
+                <th class="info">정보</th>
+                <th class="select">선택</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="tour : ${tourList}">
+                <tr class="tBody" th:object="${tour}">
+                    <td class="image">
+                        <img class="img" th:src="*{image}" alt="관광지사진"
+                             th:if="${tour.image != null}" style="width:100%;height:100%"/>
+                    </td>
+                    <td class="info">
+                        <p th:text="|title: *{title}|"></p><br/>
+                        <p th:text="|tel: *{tel}|"></p><br/>
+                        <p th:text="|addr: *{addr}|"></p><br/>
+                    </td>
+                    <td class="select">
+                        <form action="tour.html" th:action="@{/trut/tour/add}" method="post">
+                            <input type="hidden" id="image" name="image" th:value="*{image}">
+                            <input type="hidden" id="mapX" name="mapX" th:value="*{mapX}" >
+                            <input type="hidden" id="mapY" name="mapY" th:value="*{mapY}">
+                            <input type="hidden" id="tel" name="tel" th:value="*{tel}">
+                            <input type="hidden" id="title" name="title" th:value="*{title}">
+                            <input type="hidden" id="addr" name="addr" th:value="*{addr}">
+                            <button class="w-5 btn btn-primary btn-lg" type="submit">선택</button>
+                        </form>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row" th:object="${paging}" th:if="${paging.getTotalCount() > 0}">
+        <div class="paging" style="text-align: center">
+            <a class="changePage" th:if="${paging.getPrev()}" th:href="|@{/trut/tour/{page}(page=*{startPage-1},code=${classification.getCode()})}|"><code style="font-size: 22pt">&lt;</code></a>
+            <th:block th:each="num : ${#numbers.sequence(paging.getStartPage(), paging.getEndPage())}">
+                <code th:if="${paging.getPageNum() == num}" style="font-size: 22pt" th:text="${num}"></code>
+                <a class="changePage" th:unless="${paging.getPageNum() == num}" th:href="|@{/trut/tour/{page}(page=${num},code=${classification.getCode()})}|"><code style="font-size: 22pt" th:text="${num}"></code></a>
+            </th:block>
+            <a class="changePage" th:if="*{next}" th:href="|@{/trut/tour/{page}(page=*{endPage+1},code=${classification.getCode()})}|"><code style="font-size: 22pt">&gt;</code></a>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
