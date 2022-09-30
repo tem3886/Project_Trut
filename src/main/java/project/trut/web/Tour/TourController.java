@@ -1,29 +1,31 @@
 package project.trut.web.Tour;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import project.trut.domain.ApiKey;
+import project.trut.domain.service.tour.TourApiDto;
+import project.trut.domain.service.tour.TourService;
 import project.trut.domain.tour.InitTour;
+import project.trut.domain.tour.TourLocalRepository;
 
-import java.net.URI;
 import java.util.*;
 
 @Controller
 @Slf4j
-@RequiredArgsConstructor
 @RequestMapping("/trut/tour")
 public class TourController {
 
-    private final ApiKey apiKey;
+    private final TourService tourService;
+    private final List<TourApiDto> tourList;
+
+    public TourController(TourService tourService, TourLocalRepository tourLocalRepository) {
+        this.tourService = tourService;
+        this.tourList = tourLocalRepository.getTourList();
+    }
 
     @ModelAttribute("initTours")
     public InitTour[] initTours(){
@@ -32,14 +34,24 @@ public class TourController {
 
 
     @GetMapping
-    public String wayPoint(@RequestParam(name = "error", defaultValue = "false") boolean error,
+    public String wayPoint(@RequestParam(name = "parse", defaultValue = "false") boolean parse,
+                           @RequestParam(name="size", defaultValue = "false") boolean size,
+                           @RequestParam(name="select", defaultValue = "false") boolean select,
                            Model model) {
-        if (error) {
-            model.addAttribute("error", "잠시 후에 다시 시도해 주세요.");
+        if (parse) {
+            model.addAttribute("parse", "잠시 후에 다시 시도해 주세요.");
         }
+        if (size) {
+            model.addAttribute("size", "관광지는 최대 3개 선택할 수 있습니다.");
+        }
+        if (select) {
+            model.addAttribute("select", "저장되었습니다.");
+        }
+
         model.addAttribute("paging", new TourPaging());
         model.addAttribute("tourList", new ArrayList<TourApiDto>());
         model.addAttribute("classification", InitTour.nature);
+
         return "trut/tour";
     }
 
@@ -52,26 +64,29 @@ public class TourController {
         try {
             getTourList(model, paging);
         } catch (ParseException e) {
-            return "redirect:/trut/tour?error=true";
+            return "redirect:/trut/tour?parse=true";
         }
 
         return "trut/tour";
     }
 
-    @GetMapping("/{pageNum}")
+    @RequestMapping("/{pageNum}")
     public String tourPage(@PathVariable("pageNum") int pageNum,
-                           @RequestParam("code") String code,
+                           @RequestParam(name = "classification", required = false) Optional<InitTour> initTour,
+                           @RequestParam(name = "code", required = false) Optional<String> code,
                            Model model) {
 
-        log.info("error");
-        TourPaging paging = new TourPaging();
-        InitTour initTour = InitTour.nature;
-        for (InitTour tour: InitTour.values()) {
-            if (tour.getCode() == code) {
-                initTour = tour;
+
+        if (!initTour.isPresent()) {
+            for (InitTour tour: InitTour.values()) {
+                if (tour.getCode().equals(code.get())) {
+                    initTour = Optional.of(tour);
+                }
             }
         }
-        paging.setCode(initTour.getCode());
+
+        TourPaging paging = new TourPaging();
+        paging.setCode(initTour.get().getCode());
         paging.setPageNum(pageNum);
 
         try {
@@ -80,69 +95,26 @@ public class TourController {
             return "redirect:/trut/tour?error=true";
         }
 
+        model.addAttribute("classification", initTour.get());
+
         return "trut/tour";
     }
 
+    @PostMapping("/add")
+    public String addTour(@ModelAttribute("tour") TourApiDto tour,
+                          Model model) {
+        if (tourList.size() >= 3) {
+            return "redirect:/trut/tour?size=true";
+        }
+
+        tourList.add(tour);
+
+        return "redirect:/trut/tour?select=true";
+    }
+
     private void getTourList(Model model, TourPaging paging) throws ParseException {
-        List<TourApiDto> tourList = getTourList(paging);
+        List<TourApiDto> tourList = tourService.getTourList(paging);
         model.addAttribute("tourList", tourList);
         model.addAttribute("paging", paging);
     }
-
-
-    private List<TourApiDto> getTourList(TourPaging tourPaging) throws ParseException {
-        String strUri = makeUri(tourPaging);
-
-        URI uri = URI.create(strUri);
-
-        RestTemplate restTemplate = new RestTemplate();
-        String jsonString = restTemplate.getForObject(uri, String.class);
-        List<TourApiDto> tourApiDtoList = getJsonParse(jsonString, tourPaging);
-
-        return tourApiDtoList;
-    }
-
-    private String makeUri(TourPaging tourPaging) {
-        String BaseUrl = "http://apis.data.go.kr/B551011/KorService/areaBasedList?MobileOS=ETC&MobileApp=AppTest&listYN=Y&areaCode=32&sigunguCode=13&_type=json";
-        String serviceKey = "&serviceKey=" + apiKey.getTourApi();
-        String page = "&numOfRows=10&pageNo=" + tourPaging.getPageNum();
-        String cat = "&cat1=" + tourPaging.getCode();
-
-        return BaseUrl + serviceKey + page + cat;
-    }
-
-    private List<TourApiDto> getJsonParse(String jsonString, TourPaging tourPaging) throws ParseException {
-        JSONParser jsonParser = new JSONParser();
-        log.info("jsonString = {}", jsonString);
-        JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonString);
-        JSONObject jsonResponse = (JSONObject) jsonObject.get("response");
-        JSONObject jsonBody = (JSONObject) jsonResponse.get("body");
-        JSONObject jsonItems = (JSONObject) jsonBody.get("items");
-        JSONArray jsonItem = (JSONArray) jsonItems.get("item");
-
-        Long tmp = (Long) jsonBody.get("totalCount");
-        tourPaging.setTotalCount(tmp.intValue());
-
-        List<TourApiDto> result = new ArrayList<>();
-
-        for (Object o : jsonItem) {
-            JSONObject item = (JSONObject) o;
-            result.add(makeTourDto(item));
-        }
-        return result;
-    }
-
-    private TourApiDto makeTourDto(JSONObject item) {
-
-        TourApiDto dto = new TourApiDto();
-        dto.setAddr((String) item.get("addr1"));
-        dto.setImage((String) item.get("firstimage"));
-        dto.setMapX((String) item.get("mapx"));
-        dto.setMapY((String) item.get("mapy"));
-        dto.setTel((String) item.get("tel"));
-        dto.setTitle((String) item.get("title"));
-
-        return dto;
-    }
-
 }

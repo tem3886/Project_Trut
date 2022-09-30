@@ -14,6 +14,8 @@ import project.trut.domain.member.mybatis.MyBatisMemberRepository;
 import project.trut.domain.service.location.LocationService;
 import project.trut.domain.service.login.LoginService;
 import project.trut.domain.service.member.MemberService;
+import project.trut.domain.service.tour.TourService;
+import project.trut.domain.tour.TourLocalRepository;
 
 @Configuration
 @RequiredArgsConstructor
@@ -49,5 +51,15 @@ public class MyBatisConfig {
     @Bean
     public LocationRepository locationRepository() {
         return new MyBatisLocationRepository(locationMapper);
+    }
+
+    @Bean
+    public TourService tourService() {
+        return new TourService(apiKey());
+    }
+
+    @Bean
+    public TourLocalRepository tourLocalRepository() {
+        return new TourLocalRepository();
     }
 }

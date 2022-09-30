@@ -13,6 +13,7 @@ import project.trut.domain.location.Location;
 import project.trut.domain.location.LocationUpdateDto;
 import project.trut.domain.member.Member;
 import project.trut.domain.service.location.LocationService;
+import project.trut.domain.tour.TourLocalRepository;
 import project.trut.web.SessionConst;
 
 import javax.naming.Binding;
@@ -24,10 +25,15 @@ import java.time.LocalDate;
 @Controller
 @Slf4j
 @RequestMapping("/trut")
-@RequiredArgsConstructor
 public class LocationController {
 
     private final LocationService locationService;
+    private final LocationUpdateDto location;
+
+    public LocationController(LocationService locationService, TourLocalRepository tourLocalRepository) {
+        this.locationService = locationService;
+        this.location = tourLocalRepository.getLocation();
+    }
 
     @ModelAttribute("initLocations")
     public InitLocation[] initLocations() {

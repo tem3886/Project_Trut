@@ -1,9 +1,11 @@
-package project.trut.web.Tour;
+package project.trut.domain.service.tour;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Setter @Getter
+@ToString
 public class TourApiDto {
     private String addr;
     private String image;
