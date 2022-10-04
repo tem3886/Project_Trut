@@ -67,8 +67,8 @@ public class TourService {
         TourApiDto dto = new TourApiDto();
         dto.setAddr((String) item.get("addr1"));
         dto.setImage((String) item.get("firstimage"));
-        dto.setMapX((String) item.get("mapx"));
-        dto.setMapY((String) item.get("mapy"));
+        dto.setMapX(Double.parseDouble((String) item.get("mapx")));
+        dto.setMapY(Double.parseDouble((String) item.get("mapy")));
         dto.setTel((String) item.get("tel"));
         dto.setTitle((String) item.get("title"));
 

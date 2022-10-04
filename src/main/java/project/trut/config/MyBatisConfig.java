@@ -14,6 +14,7 @@ import project.trut.domain.member.mybatis.MyBatisMemberRepository;
 import project.trut.domain.service.location.LocationService;
 import project.trut.domain.service.login.LoginService;
 import project.trut.domain.service.member.MemberService;
+import project.trut.domain.service.tour.PathService;
 import project.trut.domain.service.tour.TourService;
 import project.trut.domain.tour.TourLocalRepository;
 
@@ -61,5 +62,10 @@ public class MyBatisConfig {
     @Bean
     public TourLocalRepository tourLocalRepository() {
         return new TourLocalRepository();
+    }
+
+    @Bean
+    public PathService pathService() {
+        return new PathService(tourLocalRepository());
     }
 }

@@ -11,8 +11,8 @@ import lombok.ToString;
 public class TourApiDto {
     private String addr;
     private String image;
-    private String mapX;
-    private String mapY;
+    private double mapX;
+    private double mapY;
     private String tel;
     private String title;
 }

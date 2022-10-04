@@ -26,5 +26,9 @@ public class TourLocalRepository {
         this.location = location;
     }
 
+    public void setTourList(List<TourApiDto> list) {
+        this.tourList = list;
+    }
+
 
 }
