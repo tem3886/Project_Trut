@@ -13,4 +13,7 @@ public class ApiKey {
 
     @Value("${tour-key}")
     private String tourApi;
+
+    @Value(("${odsay-key}"))
+    private String odsayApi;
 }

@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import project.trut.domain.ApiKey;
 import project.trut.domain.location.LocationForm;
 import project.trut.domain.tour.TourApiDto;
 import project.trut.domain.tour.TourLocalRepository;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,75 +19,53 @@ import static java.lang.Math.*;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class PathService {
 
-    private final List<TourApiDto> tourList;
-    private final LocationForm location;
-    private int[] order;
-    private double dis = Integer.MAX_VALUE;
-
-    @Autowired
-    public PathService(TourLocalRepository tourLocalRepository) {
-        this.tourList = tourLocalRepository.getTourList();
-        this.location = tourLocalRepository.getLocation();
-    }
+    private final TourLocalRepository tourLocalRepository;
+    private final ApiKey apiKey;
 
     public void getOrder(){
-        int size = tourList.size();
-        int[] idx = new int[size];
-        for (int i = 0; i < size; i++) {
-            idx[i] = i;
-        }
-        permutation(idx,0,size);
+        PathCalc pathCalc = new PathCalc(tourLocalRepository);
+        int[] order = pathCalc.getOrder();
+        List<CoordinateForm> result = initOrder(order);
+        log.info("result = {}", result);
+        getOdsay();
 
-        log.info("order = {}", order);
     }
 
+    private List<CoordinateForm> initOrder(int[] order) {
+        List<CoordinateForm> result = new ArrayList<>();
+        List<TourApiDto> tourList = tourLocalRepository.getTourList();
 
-    private void permutation(int[] arr, int depth, int n) {
-        if (depth == n) {
-            log.info("arr = {}", arr);
-            distance(arr);
-            return;
-        }
-        for (int i = depth; i < n; i++) {
-            swap(arr, depth, i);
-            permutation(arr, depth + 1, n);
-            swap(arr, depth, i);
-        }
-    }
+        String mapX = String.valueOf(tourLocalRepository.getLocation().getDeparture().coordinate().get("mapX"));
+        String mapY = String.valueOf(tourLocalRepository.getLocation().getDeparture().coordinate().get("mapY"));
+        result.add(new CoordinateForm(mapX, mapY));
 
-    private void swap(int[] arr, int depth, int i) {
-        int tmp = arr[depth];
-        arr[depth] = arr[i];
-        arr[i] = tmp;
-    }
-
-    private void distance(int[] arr) {
-        double startX = location.getDeparture().coordinate().get("mapX");
-        double startY = location.getDeparture().coordinate().get("mapY");
-        double endX = location.getDestination().coordinate().get("mapX");
-        double endY = location.getDestination().coordinate().get("mapY");
-
-        double tmp = calc(startX, startY, tourList.get(arr[0]).getMapX(), tourList.get(arr[0]).getMapY());
-
-        for (int i = 1; i < arr.length; i++) {
-            tmp += calc(tourList.get(arr[i - 1]).getMapX(), tourList.get(arr[i - 1]).getMapY(), tourList.get(arr[i]).getMapX(), tourList.get(arr[i]).getMapY());
+        for (int idx: order) {
+            mapX = String.valueOf(tourList.get(idx).getMapX());
+            mapY = String.valueOf(tourList.get(idx).getMapY());
+            result.add(new CoordinateForm(mapX, mapY));
         }
 
-        int size = arr.length-1;
-        tmp += calc(tourList.get(arr[size]).getMapX(), tourList.get(arr[size]).getMapY(), endX, endY);
+        mapX = String.valueOf(tourLocalRepository.getLocation().getDestination().coordinate().get("mapX"));
+        mapY = String.valueOf(tourLocalRepository.getLocation().getDestination().coordinate().get("mapY"));
+        result.add(new CoordinateForm(mapX, mapY));
 
-        if (tmp < dis) {
-            dis = tmp;
-            order = arr;
-        }
+        return result;
     }
 
-    private double calc(double x, double y, double x1, double y1) {
-        return sqrt(pow(abs(x1 - x), 2) + pow(abs(y1 - y), 2));
+    public void getOdsay() {
+        String urlInfo = makeUri();
     }
 
+    public String makeUri() {
+        String BaseUrl = "https://api.odsay.com/v1/api/searchPubTransPathT?lang=0&OPT=0&SearchType=0&SearchPathType=2";
+        String start = "&SX=126.9027279&SY=37.5349277";
+        String end = "&EX=126.9145430&EY=37.5499421";
+        String serviceKey = "?apiKey=" + apiKey.getOdsayApi();
 
+        return BaseUrl + start + end + serviceKey;
+    }
 
 }

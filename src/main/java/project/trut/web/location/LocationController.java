@@ -56,31 +56,6 @@ public class LocationController {
         return "redirect:/trut/tour";
     }
 
-   /* @PostMapping
-    public String selectLocation(
-            @Validated @ModelAttribute LocationForm locationForm,
-            BindingResult bindingResult,
-            HttpServletRequest request){
-
-        if (bindingResult.hasErrors()) {
-            log.info("location binding Error", bindingResult.hasErrors());
-            return "trut/startTrut";
-        }
-
-        HttpSession session = request.getSession(false);
-        Member member = (Member)session.getAttribute(SessionConst.LOGIN_MEMBER);
-
-        Location location = getLocation(locationForm, member);
-
-        try {
-            locationService.save(location);
-        } catch (DuplicateKeyException e) {
-            updateLocation(location);
-        }
-
-        return "redirect:/trut/tour";
-    }*/
-
     private void updateLocation(Location location) {
         LocationUpdateDto updateParam = new LocationUpdateDto(location.getDeparture(), location.getDestination());
         locationService.update(location.getId(), location.getDateTime(), updateParam);

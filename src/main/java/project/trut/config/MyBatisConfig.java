@@ -66,6 +66,6 @@ public class MyBatisConfig {
 
     @Bean
     public PathService pathService() {
-        return new PathService(tourLocalRepository());
+        return new PathService(tourLocalRepository(), apiKey());
     }
 }
