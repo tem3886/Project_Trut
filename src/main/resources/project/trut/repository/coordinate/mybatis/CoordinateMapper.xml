@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.trut.repository.coordinate.mybatis.CoordinateMapper">
+
+    <insert id="save" keyProperty="title">
+        insert into coordinate (title, map_x, map_y)
+        values (#{title}, #{mapX}, #{mapY})
+    </insert>
+
+    <select id="findById" resultType="Tour">
+        select title, map_x, map_y
+        from coordinate
+        where title=#{title}
+    </select>
+
+</mapper>

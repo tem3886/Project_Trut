@@ -7,7 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import project.trut.domain.member.Member;
-import project.trut.domain.service.login.LoginService;
+import project.trut.service.login.LoginService;
 import project.trut.web.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;

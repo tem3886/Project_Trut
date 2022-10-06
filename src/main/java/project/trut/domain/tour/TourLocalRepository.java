@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
 import project.trut.domain.location.LocationForm;
-import project.trut.domain.location.LocationUpdateDto;
 
 import java.util.ArrayList;
 import java.util.List;

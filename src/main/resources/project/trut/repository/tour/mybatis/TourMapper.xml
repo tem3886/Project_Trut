@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.trut.repository.tour.mybatis.TourMapper">
+
+    <insert id="save" keyColumn="id,date_time" keyProperty="id,dateTime">
+        insert into tour (id, date_time, departure, destination, title_a, title_b, title_c)
+        values (#{id}, formatdatetime(#{dateTime}, 'yyyy-MM-dd'), #{departure}, #{destination}, #{titleA}, #{titleB}, #{titleC})
+    </insert>
+
+    <update id="update">
+        update tour
+        set departure=#{updateDto.departure}
+            destination=#{updateDto.destination}
+            title_a=#{updateDto.titleA},
+            title_b=#{updateDto.titleB},
+            title_C=#{updateDto.titleC}
+        where id=#{id} and date_time = #{dateTime}
+    </update>
+
+    <select id="findById" resultType="Tour">
+        select id, date_time, departure, destination, title_a, title_b, title_c
+        from tour
+        where id=#{id}
+    </select>
+
+    <select id="findByIdAndDateTime" resultType="Tour">
+        select id, date_time, departure, destination, title_a, title_b, title_c
+        from tour
+        where id = #{id} and date_time = #{dateTime}
+    </select>
+
+</mapper>

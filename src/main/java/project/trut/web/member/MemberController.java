@@ -2,7 +2,6 @@ package project.trut.web.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.Banner;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,9 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.trut.domain.member.Member;
-import project.trut.domain.member.MemberRepository;
-import project.trut.domain.member.MemberUpdateDto;
-import project.trut.domain.service.member.MemberService;
+import project.trut.repository.member.MemberUpdateDto;
+import project.trut.service.member.MemberService;
 import project.trut.web.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;
