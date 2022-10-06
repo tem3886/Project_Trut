@@ -8,13 +8,25 @@ create table member
     primary key (id)
 );
 
-drop table if exists location CASCADE;
-create table location
+drop table if exists tour CASCADE;
+create table tour
 (
     id bigint,
     date_time DATE,
-    departure varchar(10),
+    departure varchar(20),
     destination varchar(20),
+    title_a varchar(20),
+    title_b varchar(20),
+    title_c varchar(20),
     primary key (id,date_time),
     foreign key(id) references member(id)
+);
+
+drop table if exists coordinate CASCADE;
+create table coordinate
+(
+    title varchar(20),
+    map_x varchar(20),
+    map_y varchar(20),
+    primary key (title)
 );

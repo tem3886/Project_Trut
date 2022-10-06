@@ -1,7 +1,6 @@
 package project.trut.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import project.trut.domain.ApiKey;
@@ -15,7 +14,8 @@ import project.trut.domain.service.location.LocationService;
 import project.trut.domain.service.login.LoginService;
 import project.trut.domain.service.member.MemberService;
 import project.trut.domain.service.tour.PathService;
-import project.trut.domain.service.tour.TourService;
+import project.trut.domain.service.tour.TourApiService;
+import project.trut.domain.service.tour.TourDbService;
 import project.trut.domain.tour.TourLocalRepository;
 
 @Configuration
@@ -55,8 +55,8 @@ public class MyBatisConfig {
     }
 
     @Bean
-    public TourService tourService() {
-        return new TourService(apiKey());
+    public TourApiService tourService() {
+        return new TourApiService(apiKey());
     }
 
     @Bean
@@ -66,6 +66,11 @@ public class MyBatisConfig {
 
     @Bean
     public PathService pathService() {
-        return new PathService(tourLocalRepository(), apiKey());
+        return new PathService(tourLocalRepository(), tourDbService(), apiKey());
+    }
+
+    @Bean
+    public TourDbService tourDbService() {
+        return new TourDbService(tourLocalRepository());
     }
 }

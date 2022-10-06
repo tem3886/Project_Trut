@@ -24,6 +24,7 @@ public class FindController {
     public String findForm(Model model) {
 
         log.info("tourList = {}", tourLocalRepository.getTourList());
+
         pathService.getOrder();
 
         model.addAttribute("location", tourLocalRepository.getLocation());

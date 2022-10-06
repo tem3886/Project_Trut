@@ -21,4 +21,9 @@
         where id=#{id}
     </select>
 
+    <select id="findByIdAndDateTime" resultType="Location">
+        select id, date_time, departure, destination
+        from location
+        where id = #{id} and date_time = #{dateTime}
+    </select>
 </mapper>

@@ -10,13 +10,16 @@ import org.springframework.stereotype.Service;
 @ToString
 public class CoordinateForm {
 
+    private String title;
     private String mapX;
     private String mapY;
 
     public CoordinateForm() {
     }
 
-    public CoordinateForm(String mapX, String mapY) {
+
+    public CoordinateForm(String title, String mapX, String mapY) {
+        this.title = title;
         this.mapX = mapX;
         this.mapY = mapY;
     }

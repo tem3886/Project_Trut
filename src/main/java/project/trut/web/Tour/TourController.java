@@ -2,12 +2,11 @@ package project.trut.web.Tour;
 
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import project.trut.domain.tour.TourApiDto;
-import project.trut.domain.service.tour.TourService;
+import project.trut.domain.service.tour.TourApiService;
 import project.trut.domain.tour.InitTour;
 import project.trut.domain.tour.TourLocalRepository;
 
@@ -18,11 +17,11 @@ import java.util.*;
 @RequestMapping("/trut/tour")
 public class TourController {
 
-    private final TourService tourService;
+    private final TourApiService tourApiService;
     private final List<TourApiDto> tourList;
 
-    public TourController(TourService tourService, TourLocalRepository tourLocalRepository) {
-        this.tourService = tourService;
+    public TourController(TourApiService tourApiService, TourLocalRepository tourLocalRepository) {
+        this.tourApiService = tourApiService;
         this.tourList = tourLocalRepository.getTourList();
     }
 
@@ -147,7 +146,7 @@ public class TourController {
 
 
     private void getTourList(Model model, TourPaging paging) throws ParseException {
-        List<TourApiDto> tourList = tourService.getTourList(paging);
+        List<TourApiDto> tourList = tourApiService.getTourList(paging);
         model.addAttribute("tourList", tourList);
         model.addAttribute("paging", paging);
     }

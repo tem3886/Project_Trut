@@ -9,6 +9,7 @@ import project.trut.domain.location.LocationUpdateDto;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -19,9 +20,8 @@ public class MyBatisLocationRepository implements LocationRepository {
     private final LocationMapper locationMapper;
 
     @Override
-    public Location save(Location location) {
+    public void save(Location location) {
         locationMapper.save(location);
-        return location;
     }
 
     @Override
@@ -32,5 +32,10 @@ public class MyBatisLocationRepository implements LocationRepository {
     @Override
     public Optional<Location> findById(Long id) {
         return locationMapper.findById(id);
+    }
+
+    @Override
+    public List<Location> findByIdAndDateTime(Long id, LocalDate date) {
+        return locationMapper.findByIdAndDateTime(id, date);
     }
 }

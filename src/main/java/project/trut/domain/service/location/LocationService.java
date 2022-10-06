@@ -8,6 +8,7 @@ import project.trut.domain.location.LocationUpdateDto;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,8 +17,8 @@ public class LocationService {
 
     private final LocationRepository locationRepository;
 
-    public Location save(Location location){
-        return locationRepository.save(location);
+    public void save(Location location){
+        locationRepository.save(location);
     }
 
     public void update(Long id, LocalDate dateTime, LocationUpdateDto updateParam) {
@@ -26,5 +27,9 @@ public class LocationService {
 
     public Optional<Location> findById(Long id) {
         return locationRepository.findById(id);
+    }
+
+    public List<Location> findByIdAndDateTime(Long id, LocalDate dateTime) {
+        return locationRepository.findByIdAndDateTime(id, dateTime);
     }
 }

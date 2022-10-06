@@ -17,7 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class TourService {
+public class TourApiService {
 
     private final ApiKey apiKey;
 
