@@ -26,12 +26,12 @@ public class MyBatisTourRepository implements TourRepository {
     }
 
     @Override
-    public Tour findById(Long id) {
+    public List<Tour> findById(Long id) {
         return tourMapper.findById(id);
     }
 
     @Override
-    public List<Tour> findByIdAndDateTime(Long id, LocalDate dateTime) {
+    public Tour findByIdAndDateTime(Long id, LocalDate dateTime) {
         return tourMapper.findByIdAndDateTime(id, dateTime);
     }
 }

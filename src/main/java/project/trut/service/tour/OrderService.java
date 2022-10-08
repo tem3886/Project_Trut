@@ -5,7 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import project.trut.domain.ApiKey;
 import project.trut.domain.coordinate.Coordinate;
-import project.trut.domain.tour.TourApiDto;
+import project.trut.domain.member.Member;
+import project.trut.domain.api.TourApiDto;
 import project.trut.domain.tour.TourLocalRepository;
 
 import java.util.ArrayList;
@@ -17,19 +18,18 @@ import java.util.List;
 public class OrderService {
 
     private final TourLocalRepository tourLocalRepository;
+    private final DBService dbService;
     private final ApiKey apiKey;
 
-    public void getOrder(){
+    public List<Coordinate> getOrder(Member member){
         OrderCalc orderCalc = new OrderCalc(tourLocalRepository);
         int[] order = orderCalc.getOrder();
         List<Coordinate> result = initOrder(order);
 
         //db 저장
+        dbService.save(new ArrayList<>(result), member);
 
-        for (Coordinate tmp: result) {
-            log.info("tmp = {}", tmp);
-        }
-
+        return result;
     }
 
     private List<Coordinate> initOrder(int[] order) {
@@ -47,6 +47,7 @@ public class OrderService {
             mapY = String.valueOf(tourList.get(idx).getMapY());
             result.add(new Coordinate(title, mapX, mapY));
         }
+
 
         title = tourLocalRepository.getLocation().getDestination().getDescription();
         mapX = String.valueOf(tourLocalRepository.getLocation().getDestination().coordinate().get("mapX"));

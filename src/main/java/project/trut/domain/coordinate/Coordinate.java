@@ -3,9 +3,11 @@ package project.trut.domain.coordinate;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.beans.factory.annotation.Required;
 
 @Setter @Getter
+@ToString
 public class Coordinate {
 
     private String title;

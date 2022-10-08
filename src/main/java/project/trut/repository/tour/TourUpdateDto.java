@@ -4,7 +4,6 @@ import lombok.*;
 
 @Setter @Getter
 @ToString
-@RequiredArgsConstructor
 public class TourUpdateDto {
 
     private String departure;
@@ -13,4 +12,14 @@ public class TourUpdateDto {
     private String titleB;
     private String titleC;
 
+    public TourUpdateDto() {
+    }
+
+    public TourUpdateDto(String departure, String destination, String titleA, String titleB, String titleC) {
+        this.departure = departure;
+        this.destination = destination;
+        this.titleA = titleA;
+        this.titleB = titleB;
+        this.titleC = titleC;
+    }
 }

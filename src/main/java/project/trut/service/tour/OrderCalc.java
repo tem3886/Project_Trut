@@ -3,7 +3,7 @@ package project.trut.service.tour;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.trut.domain.location.LocationForm;
-import project.trut.domain.tour.TourApiDto;
+import project.trut.domain.api.TourApiDto;
 import project.trut.domain.tour.TourLocalRepository;
 
 import java.util.List;
@@ -11,7 +11,6 @@ import java.util.List;
 import static java.lang.Math.*;
 
 @Slf4j
-
 public class OrderCalc {
 
     private final List<TourApiDto> tourList;

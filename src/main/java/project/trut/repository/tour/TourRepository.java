@@ -11,8 +11,8 @@ public interface TourRepository {
 
     void update(Long id, LocalDate dateTime, TourUpdateDto updateDto);
 
-    Tour findById(Long id);
+    List<Tour> findById(Long id);
 
-    List<Tour> findByIdAndDateTime(Long id, LocalDate dateTime);
+    Tour findByIdAndDateTime(Long id, LocalDate dateTime);
 
 }

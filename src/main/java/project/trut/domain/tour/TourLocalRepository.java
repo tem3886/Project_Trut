@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
+import project.trut.domain.api.TourApiDto;
 import project.trut.domain.location.LocationForm;
 
 import java.util.ArrayList;

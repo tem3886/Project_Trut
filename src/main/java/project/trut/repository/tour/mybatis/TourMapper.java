@@ -15,7 +15,7 @@ public interface TourMapper {
 
     void update(@Param("id") Long id, @Param("dateTime") LocalDate dateTime, @Param("updateDto") TourUpdateDto updateDto);
 
-    Tour findById(Long id);
+    List<Tour> findById(Long id);
 
-    List<Tour> findByIdAndDateTime(@Param("id")Long id, @Param("dateTime")LocalDate dateTime);
+    Tour findByIdAndDateTime(@Param("id")Long id, @Param("dateTime")LocalDate dateTime);
 }

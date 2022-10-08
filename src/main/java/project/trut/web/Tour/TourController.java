@@ -5,7 +5,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import project.trut.domain.tour.TourApiDto;
+import project.trut.domain.api.TourApiDto;
 import project.trut.service.tour.TourApiService;
 import project.trut.domain.tour.InitTour;
 import project.trut.domain.tour.TourLocalRepository;

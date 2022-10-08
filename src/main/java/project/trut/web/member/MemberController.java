@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.trut.domain.member.Member;
+import project.trut.domain.tour.Tour;
 import project.trut.repository.member.MemberUpdateDto;
 import project.trut.service.member.MemberService;
+import project.trut.service.tour.DBService;
 import project.trut.web.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -26,6 +29,7 @@ import javax.servlet.http.HttpSession;
 public class MemberController {
 
     private final MemberService memberService;
+    private final DBService dbService;
 
     @GetMapping("/add")
     public String addForm(@ModelAttribute Member member) {
@@ -76,7 +80,13 @@ public class MemberController {
     }
 
     @RequestMapping("/list")
-    public String listForm(@ModelAttribute Member member) {
-        return "/";
+    public String listForm(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession(false);
+        Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
+        List<Tour> tourList = dbService.getTourById(member.getId());
+
+        model.addAttribute("tourList", tourList);
+
+        return "/members/list";
     }
 }

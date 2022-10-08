@@ -10,8 +10,8 @@
 
     <update id="update">
         update tour
-        set departure=#{updateDto.departure}
-            destination=#{updateDto.destination}
+        set departure=#{updateDto.departure},
+            destination=#{updateDto.destination},
             title_a=#{updateDto.titleA},
             title_b=#{updateDto.titleB},
             title_C=#{updateDto.titleC}

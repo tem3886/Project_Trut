@@ -1,4 +1,4 @@
-package project.trut.domain.tour;
+package project.trut.domain.api;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
