@@ -5,8 +5,71 @@
   <link th:href="@{/css/bootstrap.min.css}"
         href="../css/bootstrap.min.css" rel="stylesheet">
 
+  <style>
+        table: {
+            width: 100%;
+            border: 1px solid #444444;
+            text-align: center;
+        }
+        th, td{
+            border: 1px solid #444444;
+        }
+    </style>
+
 </head>
 <body>
+
+<script type="text/javascript">
+  function findPath(mapObj){
+    window.open("/trut/bus/"+mapObj);
+  }
+</script>
+
+<div class="container" style="max-width: 1000px">
+  <div class="py-5 text-center">
+    <h2>버스 경로</h2>
+  </div>
+
+  <th:block th:each="num : ${#numbers.sequence(1,result.size()-1)}">
+    <hr class="my-3">
+    <div class="row">
+      <div th:text="|${result[num-1].title} -> ${result[num].title}|"></div>
+    </div>
+    <div class="row">
+      <th:block th:each="odsay: ${odsayList[num-1]}">
+      <table style="float:left;width:20%" th:if="${odsayStat.index < 5}" th:onclick="|location.href='@{/trut/bus/{mapObj}(mapObj=${odsay.mapObj})}'|">
+        <tbody>
+          <tr>
+            <td th:text="|총 이동 시간: ${odsay.totalTime}|"></td>
+          </tr>
+          <th:block th:each="busInfo : ${odsay.busInfoList}">
+          <tr>
+            <td th:text="|${busInfoStat.count}번째 버스: ${busInfo.busNo}|"></td>
+          </tr>
+          <tr>
+            <td th:text="|&nbsp;${busInfoStat.count}번째 탑승: ${busInfo.startStation}|"></td>
+          </tr>
+          <tr>
+            <td th:text="|&nbsp;${busInfoStat.count}번째 하차: ${busInfo.endStation}|"></td>
+          </tr>
+          </th:block>
+        </tbody>
+      </table>
+      </th:block>
+    </div>
+  </th:block>
+
+  <hr class="my-4">
+
+  <div class="row">
+    <button class="w-100 btn btn-primary btn-lg" type="button"
+            th:onclick="|location.href='@{/}'|">
+      홈으로
+    </button>
+  </div>
+
+</div>
+
 
 </body>
 </html>

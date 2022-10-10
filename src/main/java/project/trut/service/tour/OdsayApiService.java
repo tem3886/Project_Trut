@@ -99,19 +99,23 @@ public class OdsayApiService {
         for (Object o : subPath) {
             BusInfo busInfo = new BusInfo();
             JSONObject tmp = (JSONObject) o;
-            if (!tmp.get("trafficType").equals("2")) {
+
+            Long trafficType = (Long) tmp.get("trafficType");
+            if (trafficType != 2l) {
                 continue;
             }
 
             busInfo.setStartStation((String) tmp.get("startName"));
             busInfo.setEndStation((String) tmp.get("endName"));
 
-            JSONObject jsonLane = (JSONObject) tmp.get("lane");
-            busInfo.setBusNo((String) jsonLane.get("busNo"));
+            JSONArray jsonLane = (JSONArray) tmp.get("lane");
+
+            JSONObject jsonBus = (JSONObject) jsonLane.get(0);
+
+            busInfo.setBusNo((String) jsonBus.get("busNo"));
 
             busInfoList.add(busInfo);
         }
-
         return busInfoList;
     }
 

@@ -21,9 +21,9 @@ import java.util.List;
 
 @Controller
 @Slf4j
-@RequestMapping("/trut/find")
+@RequestMapping("/trut/bus")
 @RequiredArgsConstructor
-public class FindController {
+public class BusController {
 
     private final TourLocalRepository tourLocalRepository;
     private final OdsayApiService odsayApiService;
@@ -33,11 +33,8 @@ public class FindController {
     public String findForm(Model model, HttpServletRequest request) {
         List<List<OdsayApiDto>> odsayList;
 
-        log.info("tourList = {}", tourLocalRepository.getTourList());
-
         HttpSession session = request.getSession(false);
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
-
 
         List<Coordinate> result = orderService.getOrder(member);
 
@@ -47,19 +44,19 @@ public class FindController {
             return "redirect:/trut/tour?parse=true";
         }
 
-        log.info("odsayList = {}", odsayList);
+        log.info("result = {}", result.size());
+        log.info("odsayList = {}", odsayList.size());
 
-        model.addAttribute("location", tourLocalRepository.getLocation());
-        model.addAttribute("tourList", tourLocalRepository.getTourList());
+        model.addAttribute("result", result);
         model.addAttribute("odsayList", odsayList);
 
         return "trut/busPath";
     }
 
-    @GetMapping("/bus")
+    @GetMapping("/{mapObj}")
     public String findBus(){
 
-        return "trut/busPath";
+        return "trut/findPath";
     }
 
 }
