@@ -37,7 +37,7 @@
     </div>
     <div class="row">
       <th:block th:each="odsay: ${odsayList[num-1]}">
-      <table style="float:left;width:20%" th:if="${odsayStat.index < 5}" th:onclick="|location.href='@{/trut/bus/{mapObj}(mapObj=${odsay.mapObj})}'|">
+      <table style="float:left;width:20%" th:if="${odsayStat.index < 5}">
         <tbody>
           <tr>
             <td th:text="|총 이동 시간: ${odsay.totalTime}|"></td>
@@ -53,11 +53,28 @@
             <td th:text="|&nbsp;${busInfoStat.count}번째 하차: ${busInfo.endStation}|"></td>
           </tr>
           </th:block>
+        <tr>
+          <td>
+            <form action="tour.html" th:action="@{/trut/bus}" method="post">
+              <input type="hidden" id="title1" name="title1" th:value="${result[num-1].title}">
+              <input type="hidden" id="mapX1" name="mapX1" th:value="${result[num-1].mapX}">
+              <input type="hidden" id="mapY1" name="mapY1" th:value="${result[num-1].mapY}">
+              <input type="hidden" id="title2" name="title2" th:value="${result[num].title}">
+              <input type="hidden" id="mapX2" name="mapX2" th:value="${result[num].mapX}">
+              <input type="hidden" id="mapY2" name="mapY2" th:value="${result[num].mapY}">
+              <input type="hidden" id="mapObj" name="mapObj" th:value="${odsay.mapObj}">
+              <button class="w-5 btn btn-primary btn-lg" type="submit">경로 보기</button>
+            </form>
+          </td>
+        </tr>
         </tbody>
       </table>
       </th:block>
     </div>
   </th:block>
+
+  <img th:src="@{/img/ODsay_bi_mark.png}"
+       style="float:left" alt="powered by www.ODsay.com">
 
   <hr class="my-4">
 

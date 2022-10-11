@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import project.trut.domain.ApiKey;
 import project.trut.domain.api.BusInfo;
+import project.trut.domain.api.GraphPos;
 import project.trut.domain.api.OdsayApiDto;
 import project.trut.domain.coordinate.Coordinate;
 import project.trut.domain.api.TourApiDto;
@@ -45,6 +46,69 @@ public class OdsayApiService {
 
         return odsayApiDtoList;
     }
+
+    public List<List<GraphPos>> getLane(String mapObj) throws ParseException {
+        String strUri = makeLaneUri(mapObj);
+
+        URI uri = URI.create(strUri);
+
+        RestTemplate restTemplate = new RestTemplate();
+        String jsonString = restTemplate.getForObject(uri, String.class);
+        return getLaneJsonParse(jsonString);
+
+    }
+
+    private List<List<GraphPos>> getLaneJsonParse(String jsonString) throws ParseException {
+        List<List<GraphPos>> graphPosList = new ArrayList<>();
+
+        JSONParser jsonParser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonString);
+        JSONObject jsonResult = (JSONObject) jsonObject.get("result");
+        JSONArray jsonLane = (JSONArray) jsonResult.get("lane");
+
+        for (Object lane : jsonLane) {
+            JSONObject subLane = (JSONObject) lane;
+            JSONArray jsonSection = (JSONArray) subLane.get("section");
+
+            graphPosList.add(getGraphPos(jsonSection));
+        }
+
+        return graphPosList;
+
+    }
+
+    private List<GraphPos> getGraphPos(JSONArray jsonSection) {
+        List<GraphPos> list = new ArrayList<>();
+
+        for (Object section : jsonSection) {
+            JSONObject subSection = (JSONObject) section;
+            JSONArray jsonGraphPos = (JSONArray) subSection.get("graphPos");
+
+            for (Object graphPos : jsonGraphPos) {
+                JSONObject subGraphPos = (JSONObject) graphPos;
+
+                GraphPos g = new GraphPos();
+                g.setX((Double) subGraphPos.get("x"));
+                g.setY((Double) subGraphPos.get("y"));
+                list.add(g);
+            }
+        }
+        return list;
+    }
+
+    private String makeLaneUri(String mapObj) {
+        String BaseUrl = "https://api.odsay.com/v1/api/loadLane?mapObject=0:0@";
+        String mapObject = mapObj;
+        String serviceKey = null;
+
+        try {
+            serviceKey = "&apiKey=" + URLEncoder.encode(apiKey.getOdsayApi(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        return BaseUrl + mapObject + serviceKey;
+    }
+
 
     private String makeUri(Coordinate departure, Coordinate destination) {
         String BaseUrl = "https://api.odsay.com/v1/api/searchPubTransPathT?OPT=0&SearchType=0&SearchPathType=2";

@@ -5,6 +5,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.trut.domain.api.TourApiDto;
 import project.trut.service.tour.TourApiService;
 import project.trut.domain.tour.InitTour;
@@ -37,18 +38,7 @@ public class TourController {
                            @RequestParam(name="select", defaultValue = "false") boolean select,
                            @RequestParam(name="del", defaultValue = "false") boolean del,
                            Model model) {
-        if (parse) {
-            model.addAttribute("parse", "잠시 후에 다시 시도해 주세요.");
-        }
-        if (size) {
-            model.addAttribute("size", "관광지는 최대 3개 선택할 수 있습니다.");
-        }
-        if (select) {
-            model.addAttribute("select", "저장되었습니다.");
-        }
-        if (del) {
-            model.addAttribute("del", "관광지가 모두 삭제 되었습니다.");
-        }
+
 
         model.addAttribute("paging", new TourPaging());
         model.addAttribute("tourList", new ArrayList<TourApiDto>());
@@ -59,14 +49,16 @@ public class TourController {
 
     @PostMapping
     public String findTour(@ModelAttribute("classification") InitTour initTour,
-                             Model model) {
+                           Model model,
+                           RedirectAttributes redirectAttributes) {
 
         TourPaging paging = new TourPaging();
         paging.setCode(initTour.getCode());
         try {
             getTourList(model, paging);
         } catch (ParseException e) {
-            return "redirect:/trut/tour?parse=true";
+            redirectAttributes.addAttribute("parse", true);
+            return "redirect:/trut/tour";
         }
 
         return "trut/addTour";
@@ -76,7 +68,8 @@ public class TourController {
     public String tourPage(@PathVariable("pageNum") int pageNum,
                            @RequestParam(name = "classification", required = false) Optional<InitTour> initTour,
                            @RequestParam(name = "code", required = false) Optional<String> code,
-                           Model model) {
+                           Model model,
+                           RedirectAttributes redirectAttributes) {
 
 
         if (!initTour.isPresent()) {
@@ -94,7 +87,8 @@ public class TourController {
         try {
             getTourList(model, paging);
         } catch (ParseException e) {
-            return "redirect:/trut/tour?error=true";
+            redirectAttributes.addAttribute("error", true);
+            return "redirect:/trut/tour";
         }
 
         model.addAttribute("classification", initTour.get());
@@ -104,14 +98,16 @@ public class TourController {
 
     @PostMapping("/add")
     public String addTour(@ModelAttribute("tour") TourApiDto tour,
-                          Model model) {
+                          Model model,
+                          RedirectAttributes redirectAttributes) {
         if (tourList.size() >= 3) {
-            return "redirect:/trut/tour?size=true";
+            redirectAttributes.addAttribute("size", true);
+            return "redirect:/trut/tour";
         }
 
         tourList.add(tour);
-
-        return "redirect:/trut/tour?select=true";
+        redirectAttributes.addAttribute("select", true);
+        return "redirect:/trut/tour";
     }
 
     @GetMapping("/edit")
@@ -131,17 +127,17 @@ public class TourController {
                 tourList.remove(i);
             }
         }
-        log.info("tourList = {}", tourList.toString());
 
         return "redirect:/trut/tour/edit";
     }
 
     @GetMapping("/del")
-    public String delTour(Model model) {
+    public String delTour(Model model, RedirectAttributes redirectAttributes) {
 
         tourList.clear();
 
-        return "redirect:/trut/tour?del=true";
+        redirectAttributes.addAttribute("del", true);
+        return "redirect:/trut/tour";
     }
 
 

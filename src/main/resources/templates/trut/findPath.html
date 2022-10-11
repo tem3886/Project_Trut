@@ -9,6 +9,13 @@
 
 </head>
 <body>
+
+<div>
+    <script type="text/javascript" th:if="${parse}">
+        alert("api를 불러오는데 실패했습니다. 잠시 후에 다시 시도해 주세요.");
+    </script>
+</div>
+
 <div id="map" style="width:100%;height:850px;"></div>
 
     <script>
@@ -24,14 +31,80 @@
         };
 
         var map = new naver.maps.Map('map', mapOptions);
+    </script>
 
+    <script th:if="${lane}" th:inline="javascript">
+        var selColor = ["#FF0000", "#00FF00", "#0000FF"];
+        var cnt = 0;
+        [# th:each="graphList : ${lane}"]
+
+            var polylinePath = [];
+
+            [# th:each="graph : ${graphList}"]
+                polylinePath.push(new naver.maps.LatLng([[${graph.y}]],[[${graph.x}]]));
+            [/]
+
+            var polyline = new naver.maps.Polyline({
+                    path: polylinePath,
+                    strokeColor: selColor[cnt++%3],
+                    strokeOpacity: 0.6,
+                    strokeWeight: 3,
+                    map: map
+                });
+        [/]
+        var markers = [],
+            infoWindows = [];
+
+        var marker = new naver.maps.Marker({
+                position: new naver.maps.LatLng([[${mapPath.mapY1}]], [[${mapPath.mapX1}]]),
+                map: map
+                });
+        var contentString = [
+                '<div>',
+                '   <h3>'+[[${mapPath.title1}]]+'</h3>',
+                '</div>'
+                ].join('');
+        var infoWindow = new naver.maps.InfoWindow({
+            content: contentString
+            });
+        markers.push(marker);
+        infoWindows.push(infoWindow);
+
+        var marker = new naver.maps.Marker({
+                position: new naver.maps.LatLng([[${mapPath.mapY2}]], [[${mapPath.mapX2}]]),
+                map: map
+                });
+        var contentString = [
+                '<div>',
+                '   <h3>'+[[${mapPath.title2}]]+'</h3>',
+                '</div>'
+                ].join('');
+        var infoWindow = new naver.maps.InfoWindow({
+            content: contentString
+            });
+        markers.push(marker);
+        infoWindows.push(infoWindow);
+
+        function getClickHandler(idx){
+                return function(e){
+                    var marker = markers[idx],
+                        infoWindow = infoWindows[idx];
+
+                    if(infoWindow.getMap()){
+                        infoWindow.close();
+                    } else {
+                        infoWindow.open(map, marker);
+                    }
+                }
+        }
+
+        for(var i=0, ii=markers.length; i<ii; i++){
+            naver.maps.Event.addListener(markers[i], 'click', getClickHandler(i));
+        }
     </script>
 
 <img th:src="@{/img/ODsay_bi_mark.png}"
     style="float:left" alt="powered by www.ODsay.com">
 
-<button class="w-5 btn btn-primary btn-lg" style="float:right"
-        onclick="location.href='item.html'"
-        th:onclick="|location.href='@{/trut/find/bus}'|">버스 경로-></button>
 </body>
 </html>
