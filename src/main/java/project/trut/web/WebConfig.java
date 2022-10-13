@@ -1,12 +1,14 @@
 package project.trut.web;
 
-import com.querydsl.core.annotations.Config;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import project.trut.web.interceptor.LoginCheckInterceptor;
 
+
 @Configuration
+@Slf4j
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
@@ -15,6 +17,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .order(1)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/", "/members/add", "/login", "logout",
-                        "/css/**", "/*.ico", "/error", "/trut/**");
+                        "/css/**", "/*.ico", "/error");
     }
 }

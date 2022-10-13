@@ -49,9 +49,16 @@ public class DBService {
         }
     }
 
-    @Transactional
     public List<Tour> getTourById(Long id) {
         return tourRepository.findById(id);
+    }
+    @Transactional
+    public Tour getTourByIdAndDateTime(Long id, LocalDate dateTime) {
+        return tourRepository.findByIdAndDateTime(id, dateTime);
+    }
+
+    public Coordinate getCoordinate(String title) {
+        return coordinateRepository.findByTitle(title);
     }
 
     private Tour getTour(List<Coordinate> list, Member member) {

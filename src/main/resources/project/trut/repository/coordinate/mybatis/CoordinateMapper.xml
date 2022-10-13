@@ -8,7 +8,7 @@
         values (#{title}, #{mapX}, #{mapY})
     </insert>
 
-    <select id="findById" resultType="Tour">
+    <select id="findByTitle" resultType="Coordinate">
         select title, map_x, map_y
         from coordinate
         where title=#{title}

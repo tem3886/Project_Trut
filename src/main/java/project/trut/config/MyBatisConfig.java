@@ -3,6 +3,8 @@ package project.trut.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import project.trut.domain.ApiKey;
 import project.trut.domain.api.OdsayApiDto;
 import project.trut.repository.coordinate.CoordinateRepository;
@@ -21,6 +23,8 @@ import project.trut.service.tour.OdsayApiService;
 import project.trut.service.tour.OrderService;
 import project.trut.service.tour.TourApiService;
 import project.trut.domain.tour.TourLocalRepository;
+
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor

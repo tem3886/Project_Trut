@@ -39,7 +39,7 @@
             <th:block th:each="tour : ${tourList}">
                 <tr class="tBody" th:object="${tour}">
                     <td class="date">
-                        <p th:text="*{dateTime}"></p>
+                        <a href="busPath.html" th:href="@{/trut/bus/{date}(date=*{dateTime})}" th:text="*{dateTime}"></a>
                     </td>
                     <td class="departure">
                         <p th:text="*{departure}"></p>
