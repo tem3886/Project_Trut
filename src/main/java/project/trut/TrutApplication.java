@@ -6,6 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 import project.trut.config.MyBatisConfig;
 import project.trut.domain.ApiKey;
+import project.trut.repository.coordinate.CoordinateRepository;
+import project.trut.repository.member.MemberRepository;
+import project.trut.repository.tour.TourRepository;
 
 @Slf4j
 @Import(MyBatisConfig.class)

@@ -15,7 +15,7 @@ import project.trut.domain.tour.Tour;
 import project.trut.service.tour.DBService;
 import project.trut.service.tour.OdsayApiService;
 import project.trut.service.tour.OrderService;
-import project.trut.domain.tour.TourLocalRepository;
+import project.trut.web.TourLocalRepository;
 import project.trut.web.SessionConst;
 
 import javax.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package project.trut.domain.tour;
+package project.trut.web;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import project.trut.domain.api.TourApiDto;
 import project.trut.domain.location.LocationForm;
 
+import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,9 @@ public class TourLocalRepository {
     private LocationForm location = new LocationForm();
     private List<TourApiDto> tourList = new ArrayList<>(3);
 
+    public TourLocalRepository() {
+        log.info("TourLocalRepository 생성");
+    }
 
     public void setLocation(LocationForm location) {
         this.location = location;
@@ -30,5 +34,8 @@ public class TourLocalRepository {
         this.tourList = list;
     }
 
-
+    @PreDestroy
+    public void destroy() {
+        log.info("TourLocalRepository 파괴");
+    }
 }

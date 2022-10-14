@@ -3,10 +3,8 @@ package project.trut.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import project.trut.domain.ApiKey;
-import project.trut.domain.api.OdsayApiDto;
+import project.trut.web.TourLocalRepository;
 import project.trut.repository.coordinate.CoordinateRepository;
 import project.trut.repository.coordinate.mybatis.CoordinateMapper;
 import project.trut.repository.coordinate.mybatis.MyBatisCoordinateRepository;
@@ -22,9 +20,6 @@ import project.trut.service.tour.DBService;
 import project.trut.service.tour.OdsayApiService;
 import project.trut.service.tour.OrderService;
 import project.trut.service.tour.TourApiService;
-import project.trut.domain.tour.TourLocalRepository;
-
-import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
@@ -33,6 +28,7 @@ public class MyBatisConfig {
     private final MemberMapper memberMapper;
     private final TourMapper tourMapper;
     private final CoordinateMapper coordinateMapper;
+    private final TourLocalRepository tourLocalRepository;
 
     @Bean
     public ApiKey apiKey() {
@@ -48,11 +44,6 @@ public class MyBatisConfig {
     }
 
     @Bean
-    public TourLocalRepository tourLocalRepository() {
-        return new TourLocalRepository();
-    }
-
-    @Bean
     public TourRepository tourRepository() {
         return new MyBatisTourRepository(tourMapper);
     }
@@ -62,9 +53,10 @@ public class MyBatisConfig {
         return new MyBatisCoordinateRepository(coordinateMapper);
     }
 
+
     /**
      * Service
-     */
+    */
     @Bean
     public LoginService loginService() {
         return new LoginService(memberRepository());
@@ -87,7 +79,7 @@ public class MyBatisConfig {
 
     @Bean
     public OrderService pathService() {
-        return new OrderService(tourLocalRepository(), dbService(), apiKey());
+        return new OrderService(tourLocalRepository, dbService(), apiKey());
     }
 
     @Bean

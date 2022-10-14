@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import project.trut.domain.location.LocationForm;
 import project.trut.domain.api.TourApiDto;
-import project.trut.domain.tour.TourLocalRepository;
+import project.trut.web.TourLocalRepository;
 
 import java.util.List;
 

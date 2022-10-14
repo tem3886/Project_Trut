@@ -7,7 +7,7 @@ import project.trut.domain.ApiKey;
 import project.trut.domain.coordinate.Coordinate;
 import project.trut.domain.member.Member;
 import project.trut.domain.api.TourApiDto;
-import project.trut.domain.tour.TourLocalRepository;
+import project.trut.web.TourLocalRepository;
 
 import java.util.ArrayList;
 import java.util.List;

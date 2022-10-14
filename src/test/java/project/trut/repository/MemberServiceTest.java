@@ -1,4 +1,4 @@
-package project.trut.domain.service.member;
+package project.trut.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import project.trut.domain.member.Member;
+import project.trut.repository.member.MemberRepository;
 import project.trut.repository.member.MemberUpdateDto;
 import project.trut.service.member.MemberService;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -17,7 +20,7 @@ import static org.assertj.core.api.Assertions.*;
 class MemberServiceTest {
 
     @Autowired
-    MemberService memberService;
+    MemberRepository memberRepository;
 
     @Test
     void save() {
@@ -25,10 +28,10 @@ class MemberServiceTest {
         Member member = new Member("testId", "testName", "1234");
 
         //when
-        Member saveMember = memberService.save(member);
+        Member saveMember = memberRepository.save(member);
 
         //then
-        Member findMember = memberService.findById(member.getId()).get();
+        Member findMember = memberRepository.findById(member.getId()).get();
         assertThat(findMember).isEqualTo(saveMember);
     }
 
@@ -36,15 +39,15 @@ class MemberServiceTest {
     void update() {
         //given
         Member member = new Member("testId", "testName", "1234");
-        Member saveMember = memberService.save(member);
+        Member saveMember = memberRepository.save(member);
         Long id = saveMember.getId();
 
         //when
         MemberUpdateDto updateParam = new MemberUpdateDto(member.getLoginId(),"newName", "asd");
-        memberService.update(id, updateParam);
+        memberRepository.update(id, updateParam);
 
         //then
-        Member findMember = memberService.findById(id).get();
+        Member findMember = memberRepository.findById(id).get();
         assertThat(findMember.getName()).isEqualTo(updateParam.getName());
         assertThat(findMember.getPassword()).isEqualTo(updateParam.getPassword());
     }
@@ -53,10 +56,10 @@ class MemberServiceTest {
     void findById() {
         //given
         Member member = new Member("test", "test", "test");
-        Member saveMember = memberService.save(member);
+        Member saveMember = memberRepository.save(member);
 
         //when
-        Member findMember = memberService.findById(saveMember.getId()).get();
+        Member findMember = memberRepository.findById(saveMember.getId()).get();
 
         //then
         assertThat(findMember).isEqualTo(member);
@@ -65,5 +68,14 @@ class MemberServiceTest {
 
     @Test
     void findByLoginId() {
+        //given
+        Member member = new Member("test", "test", "test");
+        Member saveMember = memberRepository.save(member);
+
+        //when
+        Optional<Member> findMember = memberRepository.findByLoginId(saveMember.getLoginId());
+
+        //then
+        assertThat(findMember.get()).isEqualTo(member);
     }
 }

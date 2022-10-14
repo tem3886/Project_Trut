@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.trut.domain.api.TourApiDto;
 import project.trut.service.tour.TourApiService;
 import project.trut.domain.tour.InitTour;
-import project.trut.domain.tour.TourLocalRepository;
+import project.trut.web.TourLocalRepository;
 
 import java.util.*;
 
@@ -19,11 +19,11 @@ import java.util.*;
 public class TourController {
 
     private final TourApiService tourApiService;
-    private final List<TourApiDto> tourList;
+    private final TourLocalRepository tourLocalRepository;
 
     public TourController(TourApiService tourApiService, TourLocalRepository tourLocalRepository) {
         this.tourApiService = tourApiService;
-        this.tourList = tourLocalRepository.getTourList();
+        this.tourLocalRepository = tourLocalRepository;
     }
 
     @ModelAttribute("initTours")
@@ -100,8 +100,15 @@ public class TourController {
     public String addTour(@ModelAttribute("tour") TourApiDto tour,
                           Model model,
                           RedirectAttributes redirectAttributes) {
+
+        List<TourApiDto> tourList = tourLocalRepository.getTourList();
+
         if (tourList.size() >= 3) {
             redirectAttributes.addAttribute("size", true);
+            return "redirect:/trut/tour";
+        }
+        if (tourList.contains(tour)) {
+            redirectAttributes.addAttribute("same", true);
             return "redirect:/trut/tour";
         }
 
@@ -112,13 +119,15 @@ public class TourController {
 
     @GetMapping("/edit")
     public String editForm(Model model) {
-        model.addAttribute("tourList", tourList);
+        model.addAttribute("tourList", tourLocalRepository.getTourList());
         return "/trut/editTour";
     }
 
     @PostMapping("/edit")
     public String editTour(@ModelAttribute("tour") TourApiDto tour,
                            Model model) {
+
+        List<TourApiDto> tourList = tourLocalRepository.getTourList();
 
         log.info("tour = {}", tour.toString());
 
@@ -134,7 +143,7 @@ public class TourController {
     @GetMapping("/del")
     public String delTour(Model model, RedirectAttributes redirectAttributes) {
 
-        tourList.clear();
+        tourLocalRepository.getTourList().clear();
 
         redirectAttributes.addAttribute("del", true);
         return "redirect:/trut/tour";

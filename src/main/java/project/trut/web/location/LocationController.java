@@ -7,20 +7,19 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import project.trut.domain.location.InitLocation;
 import project.trut.domain.location.LocationForm;
-import project.trut.domain.tour.TourLocalRepository;
+import project.trut.web.TourLocalRepository;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
 
 @Controller
 @Slf4j
 @RequestMapping("/trut")
 public class LocationController {
 
-    private final LocationForm locationRepository;
+    private final TourLocalRepository tourLocalRepository;
 
     public LocationController(TourLocalRepository tourLocalRepository) {
-        this.locationRepository = tourLocalRepository.getLocation();
+        this.tourLocalRepository = tourLocalRepository;
     }
 
     @ModelAttribute("initLocations")
@@ -38,6 +37,8 @@ public class LocationController {
             @Validated @ModelAttribute LocationForm locationForm,
             BindingResult bindingResult,
             HttpServletRequest request){
+
+        LocationForm locationRepository = tourLocalRepository.getLocation();
 
         if (bindingResult.hasErrors()) {
             log.info("location binding Error", bindingResult.hasErrors());

@@ -32,6 +32,9 @@
     <script type="text/javascript" th:if="${param.empty}">
         alert("최소 1개의 관광지를 선택해 주세요.");
     </script>
+    <script type="text/javascript" th:if="${param.same}">
+        alert("같은 관광지가 이미 존재합니다.");
+    </script>
 </div>
 
 <div class="container">
