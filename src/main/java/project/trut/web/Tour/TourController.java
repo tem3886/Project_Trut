@@ -129,8 +129,6 @@ public class TourController {
 
         List<TourApiDto> tourList = tourLocalRepository.getTourList();
 
-        log.info("tour = {}", tour.toString());
-
         for (int i=0; i < tourList.size(); i++) {
             if (tourList.get(i).equals(tour)) {
                 tourList.remove(i);

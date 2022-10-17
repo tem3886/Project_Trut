@@ -22,6 +22,7 @@
         select id, date_time, departure, destination, title_a, title_b, title_c
         from tour
         where id=#{id}
+        order by date_time desc
     </select>
 
     <select id="findByIdAndDateTime" resultType="Tour">

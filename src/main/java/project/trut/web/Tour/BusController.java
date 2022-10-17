@@ -59,9 +59,6 @@ public class BusController {
             return "redirect:/trut/tour";
         }
 
-        log.info("result = {}", result);
-        log.info("odsayList = {}", odsayList);
-
         model.addAttribute("result", result);
         model.addAttribute("odsayList", odsayList);
 
@@ -100,8 +97,6 @@ public class BusController {
 
         Tour tour = dbService.getTourByIdAndDateTime(member.getId(), localDate);
 
-        log.info("tour = {}", tour);
-
         List<Coordinate> result = tourProcessing(tour);
         List<List<OdsayApiDto>> odsayList;
 
@@ -111,9 +106,6 @@ public class BusController {
             redirectAttributes.addAttribute("parse", true);
             return "redirect:/trut/tour";
         }
-
-        log.info("result = {}", result);
-        log.info("odsayList = {}", odsayList);
 
         model.addAttribute("result", result);
         model.addAttribute("odsayList", odsayList);
