@@ -19,8 +19,24 @@
   * login_id varchar(20)
   * password varchar(20)
   * name varchar(20)
-  * 
-* Tour
+
+* TOUR
+ * id bigint, primary key, foreign key references MEMBER(id)
+ * date_time DATE, primary key
+ * departure varchar(20)
+ * destination varchar(20)
+ * title_a varchar(20)
+ * title_b varchar(20)
+ * title_c varchar(20)
+
+* COORDINATE
+ * title varchar(20), primary key
+ * map_x varchar(20)
+ * map_y varchar(20)
+
+* MEMBER: 회원을 저장하는 TABLE, id를 주 키로 db에서 자동으로 값을 지정
+* TOUR: 출발지, 관광지, 목적지를 저장하는 TABLE, id는 MEMBER의 외래키
+* COORDINATE: 출발지, 관광지, 목적지의 이름과 좌표를 저장하는 TABLE
 
 #### 구현기능
 * 회원가입/로그인/로그아웃
