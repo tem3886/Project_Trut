@@ -34,8 +34,8 @@
   * map_x varchar(20)
   * map_y varchar(20)
 
-* MEMBER: 회원을 저장하는 TABLE, id를 주 키로 db에서 자동으로 값을 지정
-* TOUR: 출발지, 관광지, 목적지를 저장하는 TABLE, id는 MEMBER의 외래키
+* MEMBER: 회원을 저장하는 TABLE, id를 primary key로 db에서 자동으로 값을 지정
+* TOUR: 출발지, 관광지, 목적지를 저장하는 TABLE
 * COORDINATE: 출발지, 관광지, 목적지의 이름과 좌표를 저장하는 TABLE
 
 #### 구현기능
