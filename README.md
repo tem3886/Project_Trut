@@ -6,15 +6,11 @@
 * 참여도: 100%(개인 프로젝트)
 
 ## 사용 기술 및 개발 환경
-*Framework: Spring Boot(2.7.3,Gradle,jar), Spring MVC
-
-*Language: JAVA(17), HTML, Thymeleaf
-
-*DB: H2 Database(2.1.214)
-
-*Tool: Intellij, GitHub
-
-*Library: LomBok, MyBatis, Json-Simple, H2 Database
+* Framework: Spring Boot(2.7.3,Gradle,jar), Spring MVC
+* Language: JAVA(17), HTML, Thymeleaf
+* DB: H2 Database(2.1.214)
+* Tool: Intellij, GitHub
+* Library: LomBok, MyBatis, Json-Simple, H2 Database
 
 ## 내용
 #### 구현기능
